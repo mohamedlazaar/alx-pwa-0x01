@@ -1,8 +1,10 @@
-import { MoviesProps } from "@/interfaces";
-import { NextApiRequest, NextApiResponse } from "next";
-export default async function handler (request: NextApiRequest, response: NextApiResponse)  {
-
-  if (request.method === "POST") {
+import { MoviesProps } from '@/interfaces';
+import { NextApiRequest, NextApiResponse } from 'next';
+export default async function handler(
+  request: NextApiRequest,
+  response: NextApiResponse
+) {
+  if (request.method === 'POST') {
     const { year, page, genre } = request.body;
     const date = new Date();
     const resp = await fetch(
@@ -11,13 +13,13 @@ export default async function handler (request: NextApiRequest, response: NextAp
       }&sort=year.decr&limit=12&page=${page}&${genre && `genre=${genre}`}`,
       {
         headers: {
-          "x-rapidapi-host": "moviesdatabase.p.rapidapi.com",
-          "x-rapidapi-key": `${process.env.MOVIE_API_KEY}`,
+          'x-rapidapi-host': 'moviesdatabase.p.rapidapi.com',
+          'x-rapidapi-key': `${process.env.MOVIE_API_KEY}`,
         },
       }
     );
 
-    if (!resp.ok) throw new Error("Failed to fetch movies");
+    if (!resp.ok) throw new Error('Failed to fetch movies');
 
     const moviesResponse = await resp.json();
     const movies: MoviesProps[] = moviesResponse.results;
@@ -29,4 +31,4 @@ export default async function handler (request: NextApiRequest, response: NextAp
     response.setHeader('Allow', ['POST']);
     response.status(405).end(`Method ${request.method} Not Allowed in here`);
   }
-};
+}
